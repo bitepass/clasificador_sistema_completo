@@ -1,0 +1,167 @@
+
+<!-- 🔒 DDIC-SM Security Protection Layer -->
+<script>
+(function() {
+    'use strict';
+    
+    console.log('🔒 DDIC-SM Security Layer - Activando protecciones...');
+    
+    // 1. Protección contra fetch malicioso
+    const originalFetch = window.fetch;
+    window.fetch = function(...args) {
+        const url = args[0];
+        
+        if (typeof url === 'string') {
+            // Lista de patrones sospechosos
+            const suspiciousPatterns = [
+                'evil', 'hack', 'malware', 'steal', 'phishing', 
+                'trojan', 'backdoor', 'keylog', 'exploit'
+            ];
+            
+            // Verificar URL sospechosa
+            const urlLower = url.toLowerCase();
+            for (const pattern of suspiciousPatterns) {
+                if (urlLower.includes(pattern)) {
+                    console.error('🚨 BLOCKED SUSPICIOUS REQUEST:', url);
+                    console.error('🔒 DDIC-SM Security: Request bloqueado por patrón sospechoso');
+                    return Promise.reject(new Error('Blocked by DDIC-SM Security'));
+                }
+            }
+            
+            // Verificar dominios no autorizados (solo permitir APIs oficiales)
+            const allowedDomains = [
+                'localhost',
+                '127.0.0.1',
+                'generativelanguage.googleapis.com',
+                'api.openai.com'
+            ];
+            
+            try {
+                const urlObj = new URL(url, window.location.origin);
+                const hostname = urlObj.hostname;
+                
+                if (!allowedDomains.includes(hostname)) {
+                    console.warn('⚠️ REQUEST TO EXTERNAL DOMAIN:', hostname);
+                    // No bloquear completamente, solo advertir
+                }
+            } catch (e) {
+                // URL relativa, permitir
+            }
+        }
+        
+        return originalFetch.apply(this, args);
+    };
+    
+    // 2. Detectar scripts inyectados dinámicamente
+    const observer = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            if (mutation.type === 'childList') {
+                mutation.addedNodes.forEach(function(node) {
+                    if (node.nodeName === 'SCRIPT') {
+                        const scriptContent = node.textContent || node.innerText || '';
+                        const scriptSrc = node.src || '';
+                        
+                        // Patrones maliciosos en scripts
+                        const maliciousPatterns = [
+                            'hack', 'evil', 'steal', 'malware', 'backdoor',
+                            'keylogger', 'trojan', 'phishing', 'exploit',
+                            'eval(', 'document.write(', 'innerHTML='
+                        ];
+                        
+                        const contentLower = scriptContent.toLowerCase();
+                        const srcLower = scriptSrc.toLowerCase();
+                        
+                        for (const pattern of maliciousPatterns) {
+                            if (contentLower.includes(pattern) || srcLower.includes(pattern)) {
+                                console.error('🚨 MALICIOUS SCRIPT DETECTED AND REMOVED');
+                                console.error('Pattern found:', pattern);
+                                console.error('Script content preview:', scriptContent.substring(0, 100));
+                                node.remove();
+                                
+                                // Log de seguridad
+                                const logData = {
+                                    timestamp: new Date().toISOString(),
+                                    event: 'MALICIOUS_SCRIPT_BLOCKED',
+                                    pattern: pattern,
+                                    preview: scriptContent.substring(0, 100)
+                                };
+                                
+                                // Intentar enviar log al backend
+                                fetch('/api/security-log', {
+                                    method: 'POST',
+                                    headers: {'Content-Type': 'application/json'},
+                                    body: JSON.stringify(logData)
+                                }).catch(err => console.warn('Could not send security log:', err));
+                                
+                                return;
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    });
+    
+    // Observar todo el documento
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+    
+    // 3. Protección contra modificación de consola
+    const originalLog = console.log;
+    const originalError = console.error;
+    
+    console.log = function(...args) {
+        const message = args.join(' ').toLowerCase();
+        if (message.includes('hack') || message.includes('exploit')) {
+            console.error('🚨 Suspicious console activity detected');
+        }
+        return originalLog.apply(this, args);
+    };
+    
+    // 4. Verificación periódica de integridad
+    let integrityCheckInterval = setInterval(function() {
+        // Verificar que elementos críticos no fueron modificados
+        const criticalElements = [
+            '#upload-form',
+            '#progress-container', 
+            '#results-container'
+        ];
+        
+        for (const selector of criticalElements) {
+            const element = document.querySelector(selector);
+            if (!element) {
+                console.warn('⚠️ Critical element missing:', selector);
+            }
+        }
+        
+        // Verificar que fetch no fue sobrescrito por código malicioso
+        if (window.fetch !== originalFetch && window.fetch.toString().includes('malicious')) {
+            console.error('🚨 FETCH FUNCTION COMPROMISED');
+            window.fetch = originalFetch; // Restaurar
+        }
+        
+    }, 10000); // Cada 10 segundos
+    
+    // 5. Protección del LocalStorage
+    const originalSetItem = localStorage.setItem;
+    localStorage.setItem = function(key, value) {
+        if (key.toLowerCase().includes('malware') || 
+            value.toLowerCase().includes('steal')) {
+            console.error('🚨 Blocked malicious localStorage operation');
+            return;
+        }
+        return originalSetItem.apply(this, arguments);
+    };
+    
+    console.log('✅ DDIC-SM Security Layer ACTIVE');
+    console.log('🔒 Protections enabled:');
+    console.log('  - Fetch request filtering');
+    console.log('  - Dynamic script detection');
+    console.log('  - Console activity monitoring');
+    console.log('  - Periodic integrity checks');
+    console.log('  - LocalStorage protection');
+    
+})();
+</script>
