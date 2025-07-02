@@ -1,206 +1,788 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>clasificador-sistema-mejorado</title>
+    <title>Sistema Clasificador de Delitos</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: sans-serif; margin: 20px; }
-        .section { margin-bottom: 20px; padding: 15px; border: 1px solid #ccc; border-radius: 5px; }
-        h2 { margin-top: 0; }
-        label { display: inline-block; width: 80px; margin-bottom: 5px; }
-        input[type="text"], input[type="email"], input[type="number"] { margin-bottom: 10px; padding: 5px; width: 200px; }
-        button { padding: 8px 15px; margin-right: 10px; cursor: pointer; }
-        pre { background-color: #f4f4f4; padding: 10px; border: 1px solid #ddd; border-radius: 4px; white-space: pre-wrap; word-wrap: break-word; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Background animated particles */
+        .background-particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(180deg); }
+        }
+
+        /* Main container */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: white;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+        }
+
+        /* Glassmorphism card */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 
+                0 15px 40px rgba(0, 0, 0, 0.2),
+                inset 0 1px 0 rgba(255, 255, 255, 0.3);
+        }
+
+        /* Upload section */
+        .upload-section {
+            text-align: center;
+        }
+
+        .upload-zone {
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
+
+        .upload-zone:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .upload-zone.dragover {
+            border-color: #4CAF50;
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 15px;
+        }
+
+        .upload-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+
+        .upload-subtext {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.9rem;
+        }
+
+        /* File input */
+        #fileInput {
+            display: none;
+        }
+
+        /* Buttons */
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            margin: 5px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4CAF50 0%, #45a049 100%);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.6);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #f44336 0%, #d32f2f 100%);
+            box-shadow: 0 4px 15px rgba(244, 67, 54, 0.4);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 6px 20px rgba(244, 67, 54, 0.6);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #FF6B6B 0%, #4ECDC4 100%);
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+            animation: pulse 2s infinite;
+            font-size: 1.2rem;
+            padding: 15px 40px;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Progress section */
+        .progress-section {
+            display: none;
+            text-align: center;
+        }
+
+        .progress-container {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            padding: 3px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: linear-gradient(90deg, #4CAF50, #45a049);
+            border-radius: 25px;
+            width: 0%;
+            transition: width 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.3),
+                transparent
+            );
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .progress-text {
+            color: white;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .timer {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9rem;
+        }
+
+        /* Results section */
+        .results-section {
+            display: none;
+        }
+
+        .result-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .result-title {
+            color: white;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .result-text {
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.6;
+        }
+
+        /* Status indicators */
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        .status-success {
+            background: rgba(76, 175, 80, 0.2);
+            color: #4CAF50;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .status-processing {
+            background: rgba(255, 193, 7, 0.2);
+            color: #FFC107;
+            border: 1px solid rgba(255, 193, 7, 0.3);
+        }
+
+        .status-error {
+            background: rgba(244, 67, 54, 0.2);
+            color: #f44336;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        /* Loading spinner */
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .glass-card {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+
+        /* Hidden class */
+        .hidden {
+            display: none !important;
+        }
+
+        /* File info */
+        .file-info {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+            text-align: left;
+        }
+
+        .file-info h4 {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        .file-info p {
+            color: rgba(255, 255, 255, 0.8);
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
-    <h1>User API Test</h1>
+    <!-- Background particles -->
+    <div class="background-particles" id="particles"></div>
 
-    <!-- Get All Users -->
-    <div class="section">
-        <h2>Get All Users (GET /users)</h2>
-        <button onclick="getUsers()">Get Users</button>
-        <pre id="get-users-result"></pre>
-    </div>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-shield-alt"></i> Sistema Clasificador de Delitos</h1>
+            <p>Clasificación automática de hechos delictivos con IA</p>
+        </div>
 
-    <!-- Create User -->
-    <div class="section">
-        <h2>Create User (POST /users)</h2>
-        <label for="create-username">Username:</label>
-        <input type="text" id="create-username" name="username"><br>
-        <label for="create-email">Email:</label>
-        <input type="email" id="create-email" name="email"><br>
-        <button onclick="createUser()">Create User</button>
-        <pre id="create-user-result"></pre>
-    </div>
+        <!-- Upload Section -->
+        <div class="glass-card upload-section" id="uploadSection">
+            <div class="upload-zone" id="uploadZone">
+                <div class="upload-icon">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                </div>
+                <div class="upload-text">
+                    Arrastra tu archivo Excel aquí o haz clic para seleccionar
+                </div>
+                <div class="upload-subtext">
+                    Formatos soportados: .xlsx, .xls (máximo 50MB)
+                </div>
+            </div>
+            
+            <input type="file" id="fileInput" accept=".xlsx,.xls" />
+            
+            <div id="fileInfo" class="file-info hidden">
+                <h4><i class="fas fa-file-excel"></i> Archivo seleccionado</h4>
+                <p><strong>Nombre:</strong> <span id="fileName"></span></p>
+                <p><strong>Tamaño:</strong> <span id="fileSize"></span></p>
+                <p><strong>Total de registros:</strong> <span id="totalRecords"></span></p>
+            </div>
 
-    <!-- Get Single User -->
-    <div class="section">
-        <h2>Get Single User (GET /users/&lt;id&gt;)</h2>
-        <label for="get-user-id">User ID:</label>
-        <input type="number" id="get-user-id" name="user_id"><br>
-        <button onclick="getUser()">Get User</button>
-        <pre id="get-user-result"></pre>
-    </div>
+            <div id="uploadActions" class="hidden">
+                <button class="btn btn-success" id="processBtn">
+                    <i class="fas fa-cogs"></i> Procesar Archivo
+                </button>
+                <button class="btn" id="selectNewBtn">
+                    <i class="fas fa-file-upload"></i> Seleccionar Otro Archivo
+                </button>
+            </div>
+        </div>
 
-    <!-- Update User -->
-    <div class="section">
-        <h2>Update User (PUT /users/&lt;id&gt;)</h2>
-        <label for="update-user-id">User ID:</label>
-        <input type="number" id="update-user-id" name="user_id"><br>
-        <label for="update-username">New Username:</label>
-        <input type="text" id="update-username" name="username"><br>
-        <label for="update-email">New Email:</label>
-        <input type="email" id="update-email" name="email"><br>
-        <button onclick="updateUser()">Update User</button>
-        <pre id="update-user-result"></pre>
-    </div>
+        <!-- Progress Section -->
+        <div class="glass-card progress-section" id="progressSection">
+            <h3 style="color: white; margin-bottom: 20px;">
+                <div class="spinner"></div>
+                Procesando archivo...
+            </h3>
+            
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+            </div>
+            
+            <div class="progress-text" id="progressText">0% completado</div>
+            <div class="timer" id="timerText">Tiempo estimado: calculando...</div>
+            
+            <div style="margin-top: 20px;">
+                <span class="status-indicator status-processing" id="statusIndicator">
+                    <i class="fas fa-clock"></i> Procesando
+                </span>
+            </div>
 
-    <!-- Delete User -->
-    <div class="section">
-        <h2>Delete User (DELETE /users/&lt;id&gt;)</h2>
-        <label for="delete-user-id">User ID:</label>
-        <input type="number" id="delete-user-id" name="user_id"><br>
-        <button onclick="deleteUser()">Delete User</button>
-        <pre id="delete-user-result"></pre>
+            <button class="btn btn-danger" id="cancelBtn">
+                <i class="fas fa-stop"></i> Cancelar Procesamiento
+            </button>
+        </div>
+
+        <!-- Results Section -->
+        <div class="glass-card results-section" id="resultsSection">
+            <h3 style="color: white; margin-bottom: 20px;">
+                <i class="fas fa-check-circle"></i> Procesamiento Completado
+            </h3>
+            
+            <div class="result-card">
+                <div class="result-title">
+                    <i class="fas fa-chart-bar"></i> Resumen del Procesamiento
+                </div>
+                <div class="result-text" id="resultSummary">
+                    <!-- Summary will be populated here -->
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-top: 30px;">
+                <button class="btn btn-download" id="downloadBtn">
+                    <i class="fas fa-download"></i> Descargar Excel Clasificado
+                </button>
+            </div>
+
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="btn" id="newProcessBtn">
+                    <i class="fas fa-plus"></i> Procesar Nuevo Archivo
+                </button>
+                <button class="btn" id="generateReportBtn">
+                    <i class="fas fa-file-alt"></i> Generar Informe
+                </button>
+            </div>
+        </div>
     </div>
 
     <script>
-        const API_BASE_URL = '/api/users';
+        // Configuration
+        const API_BASE = window.location.origin;
+        
+        // State management
+        let currentPlanillaId = null;
+        let processingInterval = null;
+        let startTime = null;
 
-        // Helper function to display results
-        function displayResult(elementId, data) {
-            document.getElementById(elementId).textContent = JSON.stringify(data, null, 2);
-        }
+        // DOM elements
+        const uploadZone = document.getElementById('uploadZone');
+        const fileInput = document.getElementById('fileInput');
+        const uploadSection = document.getElementById('uploadSection');
+        const progressSection = document.getElementById('progressSection');
+        const resultsSection = document.getElementById('resultsSection');
+        const fileInfo = document.getElementById('fileInfo');
+        const uploadActions = document.getElementById('uploadActions');
 
-        // Helper function to display errors
-        function displayError(elementId, error) {
-            document.getElementById(elementId).textContent = `Error: ${error.message || error}`;
-        }
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeParticles();
+            setupEventListeners();
+        });
 
-        // GET /users
-        async function getUsers() {
-            const resultElementId = 'get-users-result';
-            try {
-                const response = await fetch(API_BASE_URL);
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
-                displayResult(resultElementId, data);
-            } catch (error) {
-                displayError(resultElementId, error);
+        function initializeParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 50;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 3) + 's';
+                particlesContainer.appendChild(particle);
             }
         }
 
-        // POST /users
-        async function createUser() {
-            const resultElementId = 'create-user-result';
-            const username = document.getElementById('create-username').value;
-            const email = document.getElementById('create-email').value;
-            if (!username || !email) {
-                displayError(resultElementId, 'Username and email cannot be empty');
+        function setupEventListeners() {
+            // Upload zone events
+            uploadZone.addEventListener('click', () => fileInput.click());
+            uploadZone.addEventListener('dragover', handleDragOver);
+            uploadZone.addEventListener('dragleave', handleDragLeave);
+            uploadZone.addEventListener('drop', handleDrop);
+
+            // File input change
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Button events
+            document.getElementById('processBtn').addEventListener('click', processFile);
+            document.getElementById('selectNewBtn').addEventListener('click', selectNewFile);
+            document.getElementById('cancelBtn').addEventListener('click', cancelProcessing);
+            document.getElementById('downloadBtn').addEventListener('click', downloadResults);
+            document.getElementById('newProcessBtn').addEventListener('click', startNewProcess);
+            document.getElementById('generateReportBtn').addEventListener('click', generateReport);
+        }
+
+        function handleDragOver(e) {
+            e.preventDefault();
+            uploadZone.classList.add('dragover');
+        }
+
+        function handleDragLeave(e) {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+        }
+
+        function handleDrop(e) {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileUpload(files[0]);
+            }
+        }
+
+        function handleFileSelect(e) {
+            if (e.target.files.length > 0) {
+                handleFileUpload(e.target.files[0]);
+            }
+        }
+
+        async function handleFileUpload(file) {
+            // Validate file
+            if (!file.name.match(/\.(xlsx|xls)$/i)) {
+                alert('Por favor selecciona un archivo Excel (.xlsx o .xls)');
                 return;
             }
+
+            if (file.size > 50 * 1024 * 1024) { // 50MB
+                alert('El archivo es demasiado grande. Máximo 50MB.');
+                return;
+            }
+
+            // Show loading
+            showLoading('Subiendo archivo...');
+
             try {
-                const response = await fetch(API_BASE_URL, {
+                const formData = new FormData();
+                formData.append('file', file);
+
+                const response = await fetch(`${API_BASE}/api/clasificador/upload`, {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, email })
+                    body: formData
                 });
-                const data = await response.json();
-                if (!response.ok) throw new Error(data.message || `HTTP error! status: ${response.status}`);
-                displayResult(resultElementId, data);
-                // 清空输入框
-                document.getElementById('create-username').value = '';
-                document.getElementById('create-email').value = '';
-            } catch (error) {
-                displayError(resultElementId, error);
-            }
-        }
 
-        // GET /users/<id>
-        async function getUser() {
-            const resultElementId = 'get-user-result';
-            const userId = document.getElementById('get-user-id').value;
-            if (!userId) {
-                displayError(resultElementId, 'User ID cannot be empty');
-                return;
-            }
-            try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`);
-                 if (response.status === 404) throw new Error('User not found');
-                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-                const data = await response.json();
-                displayResult(resultElementId, data);
-            } catch (error) {
-                displayError(resultElementId, error);
-            }
-        }
+                const result = await response.json();
 
-        // PUT /users/<id>
-        async function updateUser() {
-            const resultElementId = 'update-user-result';
-            const userId = document.getElementById('update-user-id').value;
-            const username = document.getElementById('update-username').value;
-            const email = document.getElementById('update-email').value;
-            if (!userId) {
-                displayError(resultElementId, 'User ID cannot be empty');
-                return;
-            }
-            const updateData = {};
-            if (username) updateData.username = username;
-            if (email) updateData.email = email;
-            if (Object.keys(updateData).length === 0) {
-                 displayError(resultElementId, 'Please enter a username or email to update');
-                 return;
-            }
-
-            try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`, {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(updateData)
-                });
-                if (response.status === 404) throw new Error('User not found');
-                const data = await response.json();
-                 if (!response.ok) throw new Error(data.message || `HTTP error! status: ${response.status}`);
-                displayResult(resultElementId, data);
-                 // Clear input fields
-                document.getElementById('update-username').value = '';
-                document.getElementById('update-email').value = '';
-            } catch (error) {
-                displayError(resultElementId, error);
-            }
-        }
-
-        // DELETE /users/<id>
-        async function deleteUser() {
-            const resultElementId = 'delete-user-result';
-            const userId = document.getElementById('delete-user-id').value;
-            if (!userId) {
-                displayError(resultElementId, 'User ID cannot be empty');
-                return;
-            }
-            try {
-                const response = await fetch(`${API_BASE_URL}/${userId}`, {
-                    method: 'DELETE'
-                });
-                if (response.status === 404) throw new Error('User not found');
-                if (!response.ok && response.status !== 204) throw new Error(`HTTP error! status: ${response.status}`); // Allow 204
-                // 204 No Content indicates success
-                if (response.status === 204) {
-                     displayResult(resultElementId, { message: `User ID ${userId} has been successfully deleted` });
+                if (result.success) {
+                    currentPlanillaId = result.planilla_id;
+                    showFileInfo(result);
                 } else {
-                     // Try to read potential error message even on success-like status if not 204
-                     const data = await response.text();
-                     displayResult(resultElementId, data || { message: `Deletion successful, status code: ${response.status}` });
+                    throw new Error(result.error || 'Error subiendo archivo');
                 }
-                 // Clear input field
-                document.getElementById('delete-user-id').value = '';
             } catch (error) {
-                displayError(resultElementId, error);
+                console.error('Error:', error);
+                alert('Error subiendo archivo: ' + error.message);
+            } finally {
+                hideLoading();
             }
+        }
+
+        function showFileInfo(data) {
+            document.getElementById('fileName').textContent = data.filename;
+            document.getElementById('fileSize').textContent = formatFileSize(data.file_size || 0);
+            document.getElementById('totalRecords').textContent = data.total_filas.toLocaleString();
+            
+            fileInfo.classList.remove('hidden');
+            uploadActions.classList.remove('hidden');
+        }
+
+        async function processFile() {
+            if (!currentPlanillaId) {
+                alert('No hay archivo para procesar');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/clasificador/process/${currentPlanillaId}`, {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    showProgressSection();
+                    startProgressMonitoring();
+                } else {
+                    throw new Error(result.error || 'Error iniciando procesamiento');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error iniciando procesamiento: ' + error.message);
+            }
+        }
+
+        function showProgressSection() {
+            uploadSection.style.display = 'none';
+            progressSection.style.display = 'block';
+            startTime = Date.now();
+        }
+
+        function startProgressMonitoring() {
+            processingInterval = setInterval(async () => {
+                try {
+                    const response = await fetch(`${API_BASE}/api/clasificador/status/${currentPlanillaId}`);
+                    const status = await response.json();
+
+                    updateProgress(status);
+
+                    if (status.estado === 'COMPLETADO') {
+                        clearInterval(processingInterval);
+                        showResults(status);
+                    } else if (status.estado === 'ERROR' || status.estado === 'CANCELADO') {
+                        clearInterval(processingInterval);
+                        handleProcessingError(status);
+                    }
+                } catch (error) {
+                    console.error('Error checking status:', error);
+                }
+            }, 1000);
+        }
+
+        function updateProgress(status) {
+            const progress = Math.round(status.progreso || 0);
+            const progressBar = document.getElementById('progressBar');
+            const progressText = document.getElementById('progressText');
+            const timerText = document.getElementById('timerText');
+
+            progressBar.style.width = progress + '%';
+            progressText.textContent = `${progress}% completado (${status.registros_procesados}/${status.total_registros})`;
+
+            // Calculate estimated time
+            if (startTime && progress > 0) {
+                const elapsed = Date.now() - startTime;
+                const estimated = (elapsed / progress) * (100 - progress);
+                const minutes = Math.floor(estimated / 60000);
+                const seconds = Math.floor((estimated % 60000) / 1000);
+                timerText.textContent = `Tiempo estimado: ${minutes}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function showResults(status) {
+            progressSection.style.display = 'none';
+            resultsSection.style.display = 'block';
+
+            const summary = `
+                <p><strong>Archivo:</strong> ${status.nombre_archivo}</p>
+                <p><strong>Total de registros:</strong> ${status.total_registros.toLocaleString()}</p>
+                <p><strong>Registros procesados:</strong> ${status.registros_procesados.toLocaleString()}</p>
+                <p><strong>Estado:</strong> <span class="status-indicator status-success">Completado</span></p>
+            `;
+            document.getElementById('resultSummary').innerHTML = summary;
+        }
+
+        async function cancelProcessing() {
+            if (!currentPlanillaId) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/api/clasificador/cancel/${currentPlanillaId}`, {
+                    method: 'POST'
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    clearInterval(processingInterval);
+                    alert('Procesamiento cancelado');
+                    resetToInitialState();
+                } else {
+                    throw new Error(result.error || 'Error cancelando procesamiento');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error cancelando procesamiento: ' + error.message);
+            }
+        }
+
+        async function downloadResults() {
+            if (!currentPlanillaId) return;
+
+            try {
+                showLoading('Generando Excel...');
+                
+                const response = await fetch(`${API_BASE}/api/clasificador/generate-excel/${currentPlanillaId}`);
+                
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = window.URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = `clasificado_${Date.now()}.xlsx`;
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                    document.body.removeChild(a);
+                } else {
+                    throw new Error('Error generando Excel');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Error descargando archivo: ' + error.message);
+            } finally {
+                hideLoading();
+            }
+        }
+
+        function generateReport() {
+            // This would open a modal or navigate to report generation
+            alert('Funcionalidad de informes en desarrollo');
+        }
+
+        function startNewProcess() {
+            resetToInitialState();
+        }
+
+        function selectNewFile() {
+            fileInput.value = '';
+            fileInfo.classList.add('hidden');
+            uploadActions.classList.add('hidden');
+            currentPlanillaId = null;
+        }
+
+        function resetToInitialState() {
+            uploadSection.style.display = 'block';
+            progressSection.style.display = 'none';
+            resultsSection.style.display = 'none';
+            fileInfo.classList.add('hidden');
+            uploadActions.classList.add('hidden');
+            fileInput.value = '';
+            currentPlanillaId = null;
+            
+            if (processingInterval) {
+                clearInterval(processingInterval);
+                processingInterval = null;
+            }
+        }
+
+        function handleProcessingError(status) {
+            alert(`Error en el procesamiento: ${status.estado}`);
+            resetToInitialState();
+        }
+
+        function showLoading(message) {
+            // Simple loading implementation
+            console.log('Loading:', message);
+        }
+
+        function hideLoading() {
+            console.log('Loading finished');
+        }
+
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
     </script>
 </body>
