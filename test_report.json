@@ -1,0 +1,20 @@
+{
+  "total_tests": 66,
+  "passed": 60,
+  "failed": 6,
+  "success_rate": 90.9090909090909,
+  "duration": 5.786384105682373,
+  "errors": [
+    "\u274c FAIL: Procesamiento fila 1 - Clasificaci\u00f3n inv\u00e1lida ",
+    "\u274c FAIL: Procesamiento fila 2 - Clasificaci\u00f3n inv\u00e1lida ",
+    "\u274c FAIL: Procesamiento fila 3 - Clasificaci\u00f3n inv\u00e1lida ",
+    "\u274c FAIL: Endpoint test - HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/clasificador/test (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7a8470980440>: Failed to establish a new connection: [Errno 111] Connection refused')) ",
+    "\u274c FAIL: Endpoint planillas - HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/clasificador/planillas (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7a84709996d0>: Failed to establish a new connection: [Errno 111] Connection refused')) ",
+    "\u274c FAIL: Endpoint upload - HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/clasificador/upload (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7a8470975950>: Failed to establish a new connection: [Errno 111] Connection refused')) "
+  ],
+  "warnings": [
+    "\u26a0\ufe0f  WARN: Gemini API key - No configurada - se usar\u00e1 clasificaci\u00f3n por reglas ",
+    "\u26a0\ufe0f  WARN: OpenAI API key - No configurada - se usar\u00e1 clasificaci\u00f3n por reglas ",
+    "\u26a0\ufe0f  WARN: Clasificaci\u00f3n Gemini - No retorna clasificaci\u00f3n v\u00e1lida "
+  ]
+}

@@ -1,0 +1,119 @@
+2025-07-05 03:02:41,859 - INFO - ✅ PASS: Import flask 
+2025-07-05 03:02:42,001 - INFO - ✅ PASS: Import flask_sqlalchemy 
+2025-07-05 03:02:42,002 - INFO - ✅ PASS: Import flask_cors 
+2025-07-05 03:02:42,002 - INFO - ✅ PASS: Import pandas 
+2025-07-05 03:02:42,002 - INFO - ✅ PASS: Import openpyxl 
+2025-07-05 03:02:42,248 - INFO - ✅ PASS: Import google.generativeai 
+2025-07-05 03:02:42,509 - INFO - ✅ PASS: Import openai 
+2025-07-05 03:02:42,509 - INFO - ✅ PASS: Import requests 
+2025-07-05 03:02:42,511 - INFO - ✅ PASS: Import dotenv 
+2025-07-05 03:02:42,511 - INFO - ✅ PASS: Import sqlite3 
+2025-07-05 03:02:42,512 - INFO - ✅ PASS: Database file exists 
+2025-07-05 03:02:42,512 - INFO - ✅ PASS: Table users exists 
+2025-07-05 03:02:42,512 - INFO - ✅ PASS: Table planillas exists 
+2025-07-05 03:02:42,512 - INFO - ✅ PASS: Table hechos_delictivos exists 
+2025-07-05 03:02:42,512 - INFO - ✅ PASS: Table personas_involucradas exists 
+2025-07-05 03:02:42,512 - INFO - ✅ PASS: Table logs_procesamiento exists 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column id exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column planilla_id exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column jurisdiccion exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column calificacion exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column modalidad exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column victimas exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column armas exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column lugar exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column metodo_clasificacion exists in hechos_delictivos 
+2025-07-05 03:02:42,513 - INFO - ✅ PASS: Column confianza_clasificacion exists in hechos_delictivos 
+2025-07-05 03:02:42,536 - INFO - ✅ PASS: Clasificación por defecto 
+2025-07-05 03:02:42,536 - INFO - ✅ PASS: Clasificación por reglas 
+2025-07-05 03:02:42,536 - INFO - ✅ PASS: Regla de robo detectada 
+2025-07-05 03:02:42,536 - INFO - ✅ PASS: Regla de arma de fuego detectada 
+2025-07-05 03:02:42,537 - INFO - ✅ PASS: Limpieza de clasificación 
+2025-07-05 03:02:42,537 - INFO - ✅ PASS: Limpieza corrige valores inválidos 
+2025-07-05 03:02:42,539 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Clasificación con cascada 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Confianza en rango válido 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Tiempo de procesamiento válido 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría JURISDICCION válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría CALIFICACION válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría MODALIDAD válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría VICTIMAS válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría LESIONADO válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría IMPUTADOS válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría EDAD válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría ARMAS válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría LUGAR válida 
+2025-07-05 03:02:42,540 - INFO - ✅ PASS: Categoría TENTATIVA válida 
+2025-07-05 03:02:42,551 - INFO - ✅ PASS: Archivo Excel de prueba creado 
+2025-07-05 03:02:42,556 - INFO - ✅ PASS: Archivo Excel se puede leer correctamente 
+2025-07-05 03:02:42,557 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:42,558 - ERROR - ❌ FAIL: Procesamiento fila 1 - Clasificación inválida 
+2025-07-05 03:02:42,559 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:42,559 - ERROR - ❌ FAIL: Procesamiento fila 2 - Clasificación inválida 
+2025-07-05 03:02:42,560 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:42,560 - ERROR - ❌ FAIL: Procesamiento fila 3 - Clasificación inválida 
+2025-07-05 03:02:47,571 - ERROR - ❌ FAIL: Endpoint test - HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/clasificador/test (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7a8470980440>: Failed to establish a new connection: [Errno 111] Connection refused')) 
+2025-07-05 03:02:47,572 - ERROR - ❌ FAIL: Endpoint planillas - HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/clasificador/planillas (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7a84709996d0>: Failed to establish a new connection: [Errno 111] Connection refused')) 
+2025-07-05 03:02:47,580 - ERROR - ❌ FAIL: Endpoint upload - HTTPConnectionPool(host='localhost', port=5000): Max retries exceeded with url: /api/clasificador/upload (Caused by NewConnectionError('<urllib3.connection.HTTPConnection object at 0x7a8470975950>: Failed to establish a new connection: [Errno 111] Connection refused')) 
+2025-07-05 03:02:47,582 - WARNING - ⚠️  WARN: Gemini API key - No configurada - se usará clasificación por reglas 
+2025-07-05 03:02:47,582 - WARNING - ⚠️  WARN: OpenAI API key - No configurada - se usará clasificación por reglas 
+2025-07-05 03:02:47,584 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:47,584 - WARNING - ⚠️  WARN: Clasificación Gemini - No retorna clasificación válida 
+2025-07-05 03:02:47,585 - INFO - ✅ PASS: Archivo de seguridad existe: security_manager.py 
+2025-07-05 03:02:47,585 - INFO - ✅ PASS: Archivo de seguridad existe: protected_main.py 
+2025-07-05 03:02:47,585 - INFO - ✅ PASS: Archivo de seguridad existe: SECURITY_README.md 
+2025-07-05 03:02:47,585 - INFO - ✅ PASS: Permisos válidos: main.py 
+2025-07-05 03:02:47,585 - INFO - ✅ PASS: Permisos válidos: clasificador.py 
+2025-07-05 03:02:47,586 - INFO - ✅ PASS: Verificación de seguridad completada 
+2025-07-05 03:02:47,587 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:47,587 - INFO - ✅ PASS: Rendimiento caso 1 Tiempo: 1ms
+2025-07-05 03:02:47,589 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:47,589 - INFO - ✅ PASS: Rendimiento caso 2 Tiempo: 1ms
+2025-07-05 03:02:47,590 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:47,590 - INFO - ✅ PASS: Rendimiento caso 3 Tiempo: 1ms
+2025-07-05 03:02:47,591 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:47,592 - INFO - ✅ PASS: Rendimiento caso 4 Tiempo: 1ms
+2025-07-05 03:02:47,593 - ERROR - Error en clasificación con Gemini: 
+  No API_KEY or ADC found. Please either:
+    - Set the `GOOGLE_API_KEY` environment variable.
+    - Manually pass the key with `genai.configure(api_key=my_api_key)`.
+    - Or set up Application Default Credentials, see https://ai.google.dev/gemini-api/docs/oauth for more information.
+2025-07-05 03:02:47,593 - INFO - ✅ PASS: Rendimiento caso 5 Tiempo: 1ms
+2025-07-05 03:02:47,593 - INFO - ✅ PASS: Rendimiento general Tiempo total: 0.01s
+2025-07-05 03:02:47,593 - INFO - ✅ PASS: Tiempo promedio Promedio: 1ms
