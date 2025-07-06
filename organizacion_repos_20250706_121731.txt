@@ -1,0 +1,21 @@
+[0;32m📁 Repositorio: clasificador_sistema_completo[0m
+[0;34mRama predeterminada: cursor/check-in-with-the-user-acb6[0m
+
+| Rama | Último Commit | Días | Mensaje | Estado |
+|------|---------------|------|---------|--------|
+| cursor/bc-b2fec4da-d0d6-42f2-a257-456226942d45-5b25 | 2025-07-06 | 0 | Add complete Excel/CSV text search web applicat... | 🔄 MOVER A REPO INDEPENDIENTE |
+| cursor/bc-7b2c1c9b-bcde-49f0-ae20-a5ae47f4266d-39c1 | 2025-07-06 | 0 | Initial project setup: Excel/CSV text search we... | 🔄 MOVER A REPO INDEPENDIENTE |
+| cursor/bc-586f43a9-e5f5-4727-bcfb-1d53b417d9c7-cb90 | 2025-07-06 | 0 | Create Excel/CSV search web app with Flask and ... | 🔄 MOVER A REPO INDEPENDIENTE |
+| cursor/update-frontend-to-fix-fetch-error-df2e | 2025-07-05 | 1 | Actualizar clasificador AI según nuevos requisi... | ✅ Activa |
+| cursor/actualizar-clasificador-ai-seg-n-nuevos-requisitos-3006 | 2025-07-05 | 1 | Add comprehensive DDIC-SM system improvement ro... | ✅ Activa |
+| origin | 2025-07-01 | 5 | Implement full IA-powered classification system... | ✅ Activa |
+| cursor/check-in-with-the-user-acb6 | 2025-07-01 | 5 | Implement full IA-powered classification system... | ✅ Activa (DEFAULT) |
+| main | 2025-06-29 | 7 | Mejoras: modo oscuro, internacionalización, fil... | ✅ Activa |
+
+
+[0;34m=== 📊 Resumen ===[0m
+Total de ramas: 8
+Ramas obsoletas (>15 días): 0
+Estado: [0;32mRepositorio organizado[0m
+
+[0;34mReporte guardado en: organizacion_repos_20250706.txt[0m
