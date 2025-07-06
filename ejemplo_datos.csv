@@ -1,0 +1,16 @@
+ID,Nombre,Apellido,Email,Telefono,Ciudad,Empresa,Cargo,Salario
+1,Juan,Pérez,juan.perez@email.com,+34 123 456 789,Madrid,TechCorp,Desarrollador,45000
+2,María,González,maria.gonzalez@empresa.com,+34 987 654 321,Barcelona,DataSoft,Analista,38000
+3,Carlos,Rodríguez,carlos.rodriguez@company.com,+34 555 123 456,Valencia,WebSolutions,Diseñador,35000
+4,Ana,Martínez,ana.martinez@tech.com,+34 777 888 999,Sevilla,CloudTech,Gerente,55000
+5,Luis,García,luis.garcia@startup.com,+34 111 222 333,Bilbao,StartupInc,CEO,75000
+6,Elena,López,elena.lopez@consulting.com,+34 444 555 666,Zaragoza,ConsultingPro,Consultora,42000
+7,Pedro,Sánchez,pedro.sanchez@finance.com,+34 999 888 777,Málaga,FinanceGroup,Contador,40000
+8,Laura,Fernández,laura.fernandez@marketing.com,+34 333 444 555,Valladolid,MarketingPlus,Directora,50000
+9,Miguel,Jiménez,miguel.jimenez@sales.com,+34 666 777 888,Córdoba,SalesPro,Vendedor,32000
+10,Isabel,Ruiz,isabel.ruiz@hr.com,+34 222 333 444,Murcia,HRSolutions,RRHH,37000
+11,David,Moreno,david.moreno@support.com,+34 555 666 777,Palma,SupportTeam,Soporte,30000
+12,Carmen,Muñoz,carmen.munoz@design.com,+34 888 999 000,Santander,DesignStudio,Diseñadora,36000
+13,Javier,Álvarez,javier.alvarez@dev.com,+34 123 789 456,Oviedo,DevCompany,Programador,43000
+14,Raquel,Romero,raquel.romero@admin.com,+34 456 789 123,Pamplona,AdminCorp,Administradora,34000
+15,Antonio,Navarro,antonio.navarro@logistics.com,+34 789 123 456,Vitoria,LogisticsPro,Logística,41000
