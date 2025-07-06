@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buscar en {{ filename }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="0.5" fill="white" opacity="0.1"/><circle cx="90" cy="20" r="0.3" fill="white" opacity="0.1"/><circle cx="30" cy="40" r="0.4" fill="white" opacity="0.1"/><circle cx="70" cy="60" r="0.2" fill="white" opacity="0.1"/><circle cx="50" cy="80" r="0.3" fill="white" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 300;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .file-info {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            color: white;
+        }
+        
+        .file-info strong {
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .search-box {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        #searchInput {
+            flex: 1;
+            min-width: 300px;
+            padding: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            backdrop-filter: blur(10px);
+        }
+        
+        #searchInput::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        #searchInput:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.2);
+        }
+        
+        .column-selector {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            backdrop-filter: blur(10px);
+        }
+        
+        .column-selector h4 {
+            margin: 0 0 20px 0;
+            color: white;
+            font-size: 16px;
+            font-weight: 400;
+        }
+        
+        .columns-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+        }
+        
+        .column-chip {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            user-select: none;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .column-chip:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .column-chip.inactive {
+            background: rgba(0, 0, 0, 0.3);
+            opacity: 0.6;
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+        
+        .column-chip.inactive:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
+        
+        .show-more-btn {
+            background: rgba(255, 255, 255, 0.9);
+            color: #667eea;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .show-more-btn:hover {
+            background: white;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .control-buttons {
+            display: flex;
+            gap: 12px;
+            margin-top: 15px;
+            align-items: center;
+        }
+        
+        .control-btn {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .control-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-1px);
+        }
+        
+        button {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        button:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        
+        .reset-btn {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            margin-left: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .reset-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-left: 10px;
+            color: white;
+        }
+        
+        #caseSensitive {
+            accent-color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .results-container {
+            margin-top: 30px;
+        }
+        
+        .results-container h3 {
+            color: white;
+            margin-bottom: 20px;
+            font-weight: 400;
+        }
+        
+        .results-container p {
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 20px;
+        }
+        
+        .result-item {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        
+        .result-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-1px);
+        }
+        
+        .result-header {
+            font-weight: 600;
+            color: white;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        
+        .result-text {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 15px;
+            border-radius: 10px;
+            font-family: 'Consolas', monospace;
+            word-wrap: break-word;
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+        
+        .context {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            font-size: 13px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .context strong {
+            color: white;
+        }
+        
+        .context-item {
+            margin-bottom: 8px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: white;
+            font-size: 18px;
+        }
+        
+        #selectedCount {
+            margin-left: 15px;
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Buscar en: {{ filename }}</h1>
+        
+        <div class="file-info">
+            <strong>Archivo cargado:</strong> {{ filename }}<br>
+            <strong>Total de filas:</strong> {{ total_rows }}<br>
+            <strong>Total de columnas:</strong> {{ columns|length }}
+        </div>
+
+        <div class="column-selector">
+            <h4>🎯 Buscar en columnas (haz clic para seleccionar/deseleccionar):</h4>
+            <div class="columns-container" id="columnsContainer">
+                {% for column in columns[:8] %}
+                <div class="column-chip" onclick="toggleColumn('{{ column }}')">
+                    {{ column }}
+                </div>
+                {% endfor %}
+                {% if columns|length > 8 %}
+                <button class="show-more-btn" onclick="toggleShowMore()">
+                    <span id="showMoreText">+ {{ columns|length - 8 }} más</span>
+                </button>
+                {% endif %}
+            </div>
+            <div class="columns-container" id="hiddenColumns" style="display: none; margin-top: 10px;">
+                {% for column in columns[8:] %}
+                <div class="column-chip" onclick="toggleColumn('{{ column }}')">
+                    {{ column }}
+                </div>
+                {% endfor %}
+            </div>
+            <div class="control-buttons">
+                <button class="control-btn" onclick="selectAllColumns()">Seleccionar Todas</button>
+                <button class="control-btn" onclick="deselectAllColumns()">Deseleccionar Todas</button>
+                <span id="selectedCount">
+                    {{ columns|length }} columnas seleccionadas
+                </span>
+            </div>
+        </div>
+
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="Ingrese la palabra o texto a buscar..." onkeypress="if(event.key==='Enter') searchText()">
+            <button onclick="searchText()">Buscar</button>
+            <div class="checkbox-container">
+                <input type="checkbox" id="caseSensitive">
+                <label for="caseSensitive">Distinguir mayúsculas</label>
+            </div>
+            <a href="/reset" class="reset-btn" style="text-decoration: none; color: white;">Nuevo Archivo</a>
+        </div>
+
+        <div id="results"></div>
+    </div>
+
+    <script>
+        let selectedColumns = {{ columns|tojson }};
+        let allColumns = {{ columns|tojson }};
+        let showingMore = false;
+        
+        function toggleColumn(columnName) {
+            const chip = event.target;
+            const index = selectedColumns.indexOf(columnName);
+            
+            if (index > -1) {
+                // Deseleccionar
+                selectedColumns.splice(index, 1);
+                chip.classList.add('inactive');
+            } else {
+                // Seleccionar
+                selectedColumns.push(columnName);
+                chip.classList.remove('inactive');
+            }
+            
+            updateSelectedCount();
+        }
+        
+        function toggleShowMore() {
+            const hiddenColumns = document.getElementById('hiddenColumns');
+            const showMoreBtn = document.getElementById('showMoreText');
+            
+            if (showingMore) {
+                hiddenColumns.style.display = 'none';
+                showMoreBtn.textContent = `+ ${allColumns.length - 8} más`;
+                showingMore = false;
+            } else {
+                hiddenColumns.style.display = 'flex';
+                showMoreBtn.textContent = 'Ocultar';
+                showingMore = true;
+            }
+        }
+        
+        function selectAllColumns() {
+            selectedColumns = [...allColumns];
+            document.querySelectorAll('.column-chip').forEach(chip => {
+                chip.classList.remove('inactive');
+            });
+            updateSelectedCount();
+        }
+        
+        function deselectAllColumns() {
+            selectedColumns = [];
+            document.querySelectorAll('.column-chip').forEach(chip => {
+                chip.classList.add('inactive');
+            });
+            updateSelectedCount();
+        }
+        
+        function updateSelectedCount() {
+            const countElement = document.getElementById('selectedCount');
+            countElement.textContent = `${selectedColumns.length} columnas seleccionadas`;
+        }
+        
+        function searchText() {
+            const searchTerm = document.getElementById('searchInput').value.trim();
+            const caseSensitive = document.getElementById('caseSensitive').checked;
+            
+            if (!searchTerm) {
+                alert('Por favor ingrese un término de búsqueda');
+                return;
+            }
+            
+            if (selectedColumns.length === 0) {
+                alert('Por favor seleccione al menos una columna para buscar');
+                return;
+            }
+            
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<div class="loading">🔍 Buscando...</div>';
+            
+            fetch('/api/search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    search_term: searchTerm,
+                    case_sensitive: caseSensitive,
+                    selected_columns: selectedColumns
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    resultsDiv.innerHTML = `<div class="no-results">❌ Error: ${data.error}</div>`;
+                    return;
+                }
+                
+                if (data.results.length === 0) {
+                    resultsDiv.innerHTML = `<div class="no-results">❌ No se encontraron resultados para "${searchTerm}" en las columnas seleccionadas</div>`;
+                    return;
+                }
+                
+                let html = `<div class="results-container">
+                    <h3>✅ Encontrados ${data.total_results} resultados para "${data.search_term}"</h3>
+                    <p>Búsqueda realizada en: ${data.searched_columns.join(', ')}</p>`;
+                
+                data.results.forEach((result, index) => {
+                    html += `
+                        <div class="result-item">
+                            <div class="result-header">
+                                Resultado ${index + 1}: Fila ${result.fila}, Columna "${result.columna}" (${result.columna_numero})
+                            </div>
+                            <div class="result-text">
+                                ${result.texto_completo}
+                            </div>
+                            <div class="context">
+                                <strong>Contexto de la fila:</strong><br>
+                                ${Object.entries(result.contexto).map(([col, val]) => 
+                                    `<div class="context-item"><strong>${col}:</strong> ${val}</div>`
+                                ).join('')}
+                            </div>
+                        </div>
+                    `;
+                });
+                
+                html += '</div>';
+                resultsDiv.innerHTML = html;
+            })
+            .catch(error => {
+                resultsDiv.innerHTML = `<div class="no-results">❌ Error: ${error}</div>`;
+            });
+        }
+        
+        // Enfocar el input al cargar
+        document.getElementById('searchInput').focus();
+    </script>
+</body>
+</html>
