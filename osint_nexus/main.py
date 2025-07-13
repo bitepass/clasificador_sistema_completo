@@ -1,23 +1,32 @@
 from __future__ import annotations
 
 import json
-from pathlib import Path
 from typing import Dict
 
 import streamlit as st
 
 from osint_nexus.utils.api_manager import APIManager
 from osint_nexus.utils.pdf_report import generate_pdf
+from osint_nexus.utils.graph_builder import build_graph_from_results
+from osint_nexus.utils.retention import cleanup_files
 
 # Importamos módulos dinámicamente
 from importlib import import_module
 
-MODULE_REGISTRY: Dict[str, str] = {
-    "Dominio/IP": "domain_analysis",
-    "Correo electrónico": "email_analysis",
-    "Nombre de usuario": "username_analysis",
-    "Perfil social": "social_analysis",
-}
+from pathlib import Path
+
+def discover_modules() -> Dict[str, str]:
+    """Explora la carpeta de módulos en busca de archivos *_analysis.py."""
+    modules_dir = Path(__file__).parent / "modules"
+    registry: Dict[str, str] = {}
+    for py_file in modules_dir.glob("*_analysis.py"):
+        name = py_file.stem.replace("_analysis", "").capitalize()
+        # Convierte "domain" en "Dominio", "email" en "Email", etc.
+        friendly = name.replace("_", " ").title()
+        registry[friendly] = py_file.stem
+    return registry
+
+MODULE_REGISTRY: Dict[str, str] = discover_modules()
 
 # Configuración de la página
 st.set_page_config(page_title="OSINT-Nexus", layout="wide")
@@ -31,7 +40,7 @@ st.markdown(
     """
 )
 
-# Sidebar – Gestión de API Keys
+# Sidebar – Gestión de API Keys y políticas de datos
 st.sidebar.header("🔑 Configuración de APIs")
 
 api_key_inputs: Dict[str, str] = {}
@@ -47,6 +56,14 @@ api_manager = APIManager(initial_overrides=api_key_inputs)
 
 with st.sidebar.expander("Claves cargadas", expanded=False):
     st.json(api_manager.available_keys())
+
+st.sidebar.header("🗑️ Retención de datos")
+retention_hours = st.sidebar.number_input(
+    "Horas antes de eliminar informes locales", min_value=1, max_value=168, value=24, step=1
+)
+
+# Limpiamos PDFs antiguos en background (al arrancar la app)
+cleanup_files(Path.cwd(), "*.pdf", max_age_hours=int(retention_hours))
 
 # Selección de módulo y target
 col1, col2 = st.columns([1, 3])
@@ -85,6 +102,13 @@ if st.session_state.last_result:
                 st.json(content)
             else:
                 st.write(content)
+
+    # Muestra grafo de relaciones
+    st.subheader("Grafo de relaciones (heurístico)")
+    _, graph_fig = build_graph_from_results(
+        st.session_state.last_context["target"], st.session_state.last_result
+    )
+    st.pyplot(graph_fig)
 
     # Botón de descarga en PDF
     if st.button("📄 Descargar informe PDF"):

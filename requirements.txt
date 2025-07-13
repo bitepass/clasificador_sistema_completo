@@ -4,3 +4,4 @@ python-dotenv
 fpdf2
 pandas
 networkx
+matplotlib

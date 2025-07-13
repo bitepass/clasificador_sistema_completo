@@ -49,5 +49,18 @@ Abra la barra lateral de la aplicación y complete los campos en «Configuració
 El proyecto fue diseñado bajo el principio «Privacy by Design» y solo realiza consultas a fuentes de acceso público. 
 No debe emplearse para hostigar, discriminar, difundir desinformación ni realizar intrusiones. El usuario es el único responsable del uso que haga de la herramienta.
 
+## Visualización de grafos
+
+A partir de los hallazgos, la aplicación genera un grafo con NetworkX y Matplotlib para representar las relaciones entre entidades.
+
+## Ejecutar con Docker (recomendado para OPSEC)
+
+```bash
+docker build -t osint-nexus .
+docker run -p 8501:8501 --rm osint-nexus
+```
+
+Puede añadir proxies, VPN u otras configuraciones de red al contenedor para mejorar la OPSEC.
+
 ---
 **Autor**: Prompt generado por ChatGPT-4 asistiendo a un investigador OSINT.
