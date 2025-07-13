@@ -1,0 +1,6 @@
+streamlit
+requests
+python-dotenv
+fpdf2
+pandas
+networkx
