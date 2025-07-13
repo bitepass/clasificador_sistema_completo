@@ -1,0 +1,15 @@
+streamlit==1.29.0
+requests==2.31.0
+pandas==2.1.4
+networkx==3.2.1
+matplotlib==3.8.2
+seaborn==0.13.0
+plotly==5.17.0
+python-whois==0.8.0
+beautifulsoup4==4.12.2
+dnspython==2.4.2
+python-dotenv==1.0.0
+reportlab==4.0.7
+shodan==1.31.0
+asyncio==3.4.3
+aiohttp==3.9.1
